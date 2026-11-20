@@ -1,0 +1,151 @@
+/* Nhat Duong - Xoa mu AI | FB carousel 1080x1080
+   Measured from template.pdf (940.5pt page -> 1080px, k = 1.1483). Do not change fixed layers. */
+@font-face{font-family:Inter;src:url('fonts/Inter-Variable.ttf');font-weight:100 900}
+@font-face{font-family:Mulish;src:url('fonts/Mulish-Variable.ttf');font-weight:200 1000}
+
+:root{--orange:#E1825A;--ink:#000;--L:61px;--R:60px}
+*{box-sizing:border-box}
+html,body{margin:0;background:#cfcfcf}
+body{display:flex;flex-direction:column;align-items:center;gap:30px;padding:30px 0}
+
+/* ---------- fixed layers: background grid, 3 orange glows, avatar ---------- */
+.slide{position:relative;width:1080px;height:1080px;overflow:hidden;color:var(--ink);
+  font-family:Inter,Arial,sans-serif;font-variation-settings:'opsz' 18;
+  background:
+    url('avatar-circle.png') 439px 986px/51px 51px no-repeat,
+    url('blob-bl.png') -108px 766px/719px 403px no-repeat,
+    url('blob-br-2.png') 673px 671px/408px 409px no-repeat,
+    url('blob-br-1.png') 673px 739px/408px 341px no-repeat,
+    url('bg-grid.png') 0 0/auto 1080px no-repeat,
+    #fff}
+/* footer signature (Muli -> Mulish) */
+.slide::before,.slide::after{position:absolute;font-family:Mulish,Arial,sans-serif;font-size:20.8px;line-height:26px;white-space:nowrap}
+.slide::before{content:'Nhật Dương';left:502px;top:985px;font-weight:800}
+.slide::after{content:'Xóa mù AI';left:510px;top:1009px;font-weight:400}
+
+/* ---------- 3 blocks: .head  ->  .visual  ->  .text  (order may change, never skip) ---------- */
+.stage{position:absolute;left:var(--L);right:var(--R);top:92px;bottom:150px;display:flex;flex-direction:column}
+/* Spacing measured on all 12 template pages:
+   H1 box -> H2 box 13px | H2 -> image == image -> text (always equal), median 40px, range 27-50px
+   image height 400-450px | text end -> avatar 49-174px (median 61). render.py sets --g per slide. */
+.stage{--g:40px}
+.stage > * + *{margin-top:var(--g)}
+.stage > .visual + .text{margin-top:calc(var(--g) - 2px)}   /* -2px = half-leading of the 38px line box */
+.stage > .head + .text.tight{margin-top:26px}                /* step page: H2 -> bold list */
+.stage > .text.tight + .visual{margin-top:49px}              /* step page: list -> images */
+.stage.mid{justify-content:center}
+
+/* block 1: heading = orange highlight boxes, white Inter Bold */
+.head{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:13px}
+.h1,.h2{display:inline-block;background:var(--orange);color:#fff;font-weight:700;padding:0 4px;
+  max-width:100%;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.h1{font-size:58px;line-height:73.5px;letter-spacing:-.3px}
+.h2{font-size:41.8px;line-height:53px;letter-spacing:-.2px}
+
+/* block 2: illustration. Fills the space left between head and text, never overflows */
+.visual{flex:1 1 auto;min-height:0;max-height:450px;display:flex;justify-content:center;align-items:center;gap:22px}
+.visual img{display:block;max-width:100%;max-height:100%;min-width:0;min-height:0;object-fit:contain;
+  border:1.5px solid #000;border-radius:16px;background:#fff}
+.visual.two img{max-width:calc(50% - 11px)}
+.visual.orange img{border-color:var(--orange)}
+.visual .arrow{flex:none;width:66px;height:66px}
+.visual.fixed{flex:none;max-height:none}            /* when you want the image a set height: style="height:420px" */
+.visual .cap{font-size:20px;color:#444;text-align:center;margin-top:8px}
+.visual figure{margin:0;flex:1 1 0;min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.visual figure img{max-height:calc(100% - 44px)}
+.visual figure .cap{margin-top:12px;font-size:22px;line-height:30px;color:#000;font-weight:700}
+
+/* block 3: body text */
+.text{flex:none;font-size:27.7px;line-height:38px;font-weight:400}
+.text p{margin:0}
+.text p + p{margin-top:38px}
+.text ul{list-style:none;margin:0;padding:0}
+.text li{position:relative;padding-left:50px}
+.text li + li{margin-top:38px}            /* blank line between bullets, like template */
+.text.tight li + li{margin-top:4px}       /* step list (page 13 style) */
+.text.tight{font-weight:700}
+.text li::before{content:'';position:absolute;left:27px;top:15px;width:8px;height:8px;border-radius:50%;background:#000}
+.text b{font-weight:700}
+.text .hl{color:var(--orange);font-weight:700}
+
+/* ---------- flexible layouts ---------- */
+/* split: illustration and text side by side */
+.row{flex:1 1 auto;min-height:0;display:flex;gap:36px;align-items:center}
+.row > .visual{flex:1 1 50%;height:100%;max-height:none;margin:0}
+.row > .text{flex:1 1 50%;margin:0}
+
+/* table */
+table.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:25px;line-height:34px;
+  border:1.5px solid #000;border-radius:16px;overflow:hidden;background:#fff}
+.tbl th{background:var(--orange);color:#fff;font-weight:700;text-align:left;padding:12px 18px}
+.tbl td{padding:12px 18px;border-top:1px solid #ddd;vertical-align:top}
+.tbl td + td,.tbl th + th{border-left:1px solid #ddd}
+
+/* columns / cards */
+.cols{display:flex;gap:22px;align-items:stretch}
+.card{flex:1;border:1.5px solid #000;border-radius:16px;background:#fff;padding:20px 22px;
+  font-size:25px;line-height:34px}
+.card .k{display:inline-block;background:var(--orange);color:#fff;font-weight:700;padding:0 8px;margin-bottom:10px}
+.card img{width:100%;border-radius:10px;display:block;margin-bottom:12px}
+
+/* ---------- content components (when the illustration is the content itself) ---------- */
+.panel{border:1.5px solid #000;border-radius:16px;background:#fff;padding:26px 30px;width:100%}
+.prompt{background:var(--orange);color:#fff;border-radius:16px;padding:58px 56px;font-size:38px;line-height:60px;width:100%}
+.prompt b{font-weight:700}
+.bubbles{display:flex;flex-direction:column;align-items:flex-start;gap:30px;width:100%}
+.bubble{border:1.5px solid #000;border-radius:16px 16px 16px 4px;background:#fff;padding:24px 34px;font-size:31px;line-height:44px}
+.tree{font-size:28px;line-height:58px;padding:30px 34px}
+.tree .d{font-weight:700}
+.tree .note{color:#666;font-size:22px;margin-left:12px}
+.tree .l1{padding-left:44px}.tree .l2{padding-left:88px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;width:100%}
+.grid2 .card{padding:26px 28px}
+.card .t{font-weight:700;display:block;font-size:28px;line-height:38px}
+.card .s{font-size:24px;line-height:34px;color:#333;display:block;margin-top:8px}
+
+/* ---------- UI mock-ups: make the illustration read as "a screen", clearly apart from body text ---------- */
+.win{width:100%;border:1.5px solid #000;border-radius:16px;overflow:hidden;background:#fff;
+  box-shadow:0 16px 36px rgba(0,0,0,.14)}
+.win-bar{height:46px;display:flex;align-items:center;gap:8px;padding:0 18px;background:#EDEBE4;
+  border-bottom:1px solid #d6d3ca;font-size:18px;color:#555}
+.win-bar i{width:13px;height:13px;border-radius:50%;background:#cfccc3;flex:none}
+.win-bar .ttl{margin-left:10px}
+
+/* Claude chat (desktop app look): cream background, user bubble right, composer with orange send */
+.cc{background:#FAF9F5;padding:30px 34px;display:flex;flex-direction:column;gap:20px}
+.cc-user{align-self:flex-end;max-width:86%;background:#EAE7DD;border-radius:18px;padding:16px 26px;font-size:27px;line-height:38px;color:#1f1e1d}
+.cc-ai{display:flex;gap:14px;font-size:27px;line-height:38px;color:#1f1e1d}
+.cc-ai img{width:28px;height:28px;flex:none;margin-top:3px;border:0;border-radius:0}
+.cc-input{background:#fff;border:1px solid #d9d6cc;border-radius:22px;padding:26px 28px 16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.cc-input .txt{font-size:30px;line-height:45px;color:#1f1e1d}
+.cc-input .txt::after{content:'';display:inline-block;width:2px;height:30px;background:#1f1e1d;margin-left:3px;vertical-align:-6px}
+.cc-input .bar{display:flex;align-items:center;gap:14px;margin-top:16px;font-size:18px;color:#7a776e}
+.cc-input .bar .sp{flex:1}
+.cc-input .send{width:42px;height:42px;border-radius:12px;background:#D97757;display:flex;align-items:center;justify-content:center}
+.cc-input .att{display:inline-block;margin-bottom:14px;border-radius:10px;overflow:hidden;border:1px solid #d9d6cc}
+.cc-input .att img{display:block;height:200px;border:0;border-radius:0}
+
+/* Windows File Explorer */
+.xp-addr{display:flex;align-items:center;gap:10px;padding:14px 22px;font-size:21px;color:#333;border-bottom:1px solid #e3e3e3}
+.xp-addr span{color:#999}
+.xp-head,.xp-row{display:grid;grid-template-columns:1fr 330px;align-items:center;padding:0 22px}
+.xp-head{height:46px;font-size:19px;color:#777;border-bottom:1px solid #eee}
+.xp-row{height:70px;font-size:27px;border-bottom:1px solid #f2f2f2}
+.xp-row .n{display:flex;align-items:center;gap:14px;font-weight:600}
+.xp-row .c{font-size:22px;color:#666}
+.xp-row svg{width:34px;height:34px;flex:none}
+
+/* tool board: tiles on a tinted tray */
+.tools{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:22px;background:#F1EFEA;
+  border:1.5px solid #000;border-radius:18px;box-shadow:0 16px 36px rgba(0,0,0,.12)}
+.tool{background:#fff;border-radius:14px;padding:26px 24px;display:grid;grid-template-columns:58px 1fr;gap:4px 16px;align-items:center}
+.tool .lg{grid-row:span 2;width:58px;height:58px;object-fit:contain;border:0;border-radius:0}
+.tool .nm{font-size:29px;font-weight:700;line-height:36px}
+.tool .rl{font-size:23px;line-height:32px;color:#555}
+
+/* storyboard board: dark tray, frames + mono scene labels */
+.sb{width:780px;align-self:center;background:#141414;border-radius:16px;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px 18px;
+  box-shadow:0 16px 36px rgba(0,0,0,.18)}
+.sb figure{margin:0}
+.sb img{width:100%;display:block;border:0;border-radius:8px}
+.sb figcaption{margin-top:8px;font:500 17px/22px Consolas,'Courier New',monospace;color:#bdbdbd;letter-spacing:.5px}
